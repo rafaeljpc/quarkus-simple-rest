@@ -2,12 +2,13 @@ rootProject.name="quarkus-simple-rest"
 
 pluginManagement {
     val quarkusPluginVersion: String by settings
+    val quarkusPluginId: String by settings
     repositories {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
     }
     plugins {
-      id("io.quarkus") version "${quarkusPluginVersion}"
+        id(quarkusPluginId) version quarkusPluginVersion
     }
 }

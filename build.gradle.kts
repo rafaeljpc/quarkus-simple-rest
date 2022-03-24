@@ -1,32 +1,37 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.72"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.3.72"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.allopen") version "1.6.10"
     id("io.quarkus")
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }
+
+val quarkusPlatformGroupId: String by project
+val quarkusPlatformArtifactId: String by project
+val quarkusPlatformVersion: String by project
 
 dependencies {
-    implementation("io.quarkus:quarkus-resteasy-jsonb")
+    implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-kotlin")
-    implementation(enforcedPlatform("io.quarkus:quarkus-universe-bom:1.5.2.Final"))
-    implementation("io.quarkus:quarkus-resteasy")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("io.quarkus:quarkus-arc")
+    implementation("io.quarkus:quarkus-resteasy")
+    implementation("io.quarkus:quarkus-smallrye-openapi")
+    implementation("io.quarkus:quarkus-smallrye-health")
 
     testImplementation("io.quarkus:quarkus-junit5")
-    testImplementation("io.rest-assured:kotlin-extensions")
+    testImplementation("io.rest-assured:rest-assured")
 }
 
-group = "io.rafaeljpc.quarkus"
-version = "0.0.1"
+group = "org.acme"
+version = "1.0.0-SNAPSHOT"
 
-tasks.withType<io.quarkus.gradle.tasks.QuarkusPlatformTask> {
-
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 allOpen {
@@ -35,18 +40,7 @@ allOpen {
     annotation("io.quarkus.test.junit.QuarkusTest")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-        javaParameters = true
-    }
-}
-
-tasks.test {
-    systemProperties["java.util.logging.manager"] = "org.jboss.logmanager.LogManager"
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlinOptions.javaParameters = true
 }
