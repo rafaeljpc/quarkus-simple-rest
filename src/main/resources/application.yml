@@ -1,0 +1,20 @@
+quarkus:
+  swagger-ui:
+    always-include: true
+  mongodb:
+    connection-string: ${MONGODB_HOST:mongodb://localhost:27017}
+    database: ${MONGODB_DATABASE:simple_rest}
+    metrics:
+      enabled: true
+    credentials:
+      password: ${MONGODB_PASSWORD:mongo}
+      username: ${MONGODB_USERNAME:mongo}
+      auth-source: admin
+    tracing:
+      enabled: true
+
+"%dev":
+  quarkus:
+    log:
+      console:
+        json: false
